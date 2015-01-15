@@ -7,7 +7,7 @@ Get Time of i-remocon
 import datetime
 from iremocon import IRemocon
 
-remocon = IRemocon('remocon.yaml')
+remocon = IRemocon('iremocon.yaml')
 answer = remocon.SendCommand(b'*tg\r\n').decode('ascii')
 if answer.startswith('tg;ok;'):
     seconds = int(answer.rstrip('\r\n').rpartition(';')[2])
