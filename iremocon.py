@@ -38,6 +38,7 @@ class IRemocon(object):
 
     def SendCommand(self, message):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(60)
         s.connect((self._host, self._port))
         s.sendall(message)
 
