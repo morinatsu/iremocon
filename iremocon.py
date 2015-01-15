@@ -5,6 +5,13 @@ iremocon.py: Send and Recieve Messages with i-remocon
 import socket
 import json
 import configparser
+from logging import getLogger, StreamHandler, INFO, DEBUG
+
+logger = getLogger(__name__)
+handler = StreamHandler()
+handler.setLevel(INFO)
+logger.setLevel(INFO)
+logger.addHandler(handler)
 
 class IRemocon(object):
     """
@@ -19,10 +26,13 @@ class IRemocon(object):
             """ make invert dict from dict """
             for k in src_dict:
                 new_key = ''.join([key_str, '[', k, ']'])
+                logger.debug(repr(type(src_dict[k])))
                 if not (isinstance(src_dict[k], dict)):
+                    logger.debug(': '.join([str(src_dict[k]), k]))
                     inverted_dict[str(src_dict[k])] = new_key
                 else:
                     inverted_dict = invert_dict(src_dict[k], inverted_dict, new_key)
+            logger.debug(str(inverted_dict))
             return inverted_dict
 
 
@@ -31,6 +41,8 @@ class IRemocon(object):
         self._host = config.get('network', 'HOST')
         self._port = int(config.get('network', 'PORT'))
         self._remocon_filename = config.get('remocon code', 'filename')
+        logger.info(
+            ''.join(['remocon code file:', self._remocon_filename]))
         f = open(self._remocon_filename, encoding='utf-8')
         self.code = json.load(f)
         f.close()
