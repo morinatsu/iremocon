@@ -15,6 +15,17 @@ class IRemocon(object):
         """
         Make a New Instance
         """
+        def invert_dict(src_dict, inverted_dict, key_str):
+            """ make invert dict from dict """
+            for k in src_dict:
+                new_key = ''.join([key_str, '[', k, ']'])
+                if not (isinstance(src_dict[k], dict)):
+                    inverted_dict[str(src_dict[k])] = new_key
+                else:
+                    inverted_dict = invert_dict(src_dict[k], inverted_dict, new_key)
+            return inverted_dict
+
+
         config = configparser.ConfigParser()
         config.read(config_file)
         self._host = config.get('network', 'HOST')
@@ -23,6 +34,7 @@ class IRemocon(object):
         f = open(self._remocon_filename, encoding='utf-8')
         self.code = json.load(f)
         f.close()
+        self.inverted_code = invert_dict(self.code, {}, '')
 
     def SendCommand(self, message):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
