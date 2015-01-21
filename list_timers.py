@@ -24,7 +24,7 @@ if answer.startswith('tl;ok;'):
     body = answer.rstrip('\r\n').split(';')[3:]
     while len(body) > 0:
         seq = body.pop(0)
-        code = remocon.inverted_code[body.pop(0)]
+        code = repr([s for s in remocon.inverted_code[body.pop(0)]])
         time = reparse_time(body.pop(0))
         repeat = body.pop(0)
         print('Seq: {seq}, Code: {code}, Time: {time}'.format(seq=seq,
