@@ -4,6 +4,7 @@
 List Registerd Timers
 """
 
+import sys
 import datetime
 from iremocon import IRemocon
 
@@ -16,7 +17,7 @@ remocon = IRemocon('iremocon.yaml')
 
 # send command
 answer = remocon.SendCommand(b'*tl\r\n').decode('ascii')
-print('Recieved: ', repr(answer))
+print('Recieved: ', repr(answer), file=sys.stderr)
 
 # parse answer
 if answer.startswith('tl;ok;'):
@@ -29,5 +30,7 @@ if answer.startswith('tl;ok;'):
         repeat = body.pop(0)
         print('Seq: {seq}, Code: {code}, Time: {time}'.format(seq=seq,
             code=code, time=time))
+elif answer.startswith('tl;err;001'):
+    print('no timers has set.')
 else:
     print('error')
